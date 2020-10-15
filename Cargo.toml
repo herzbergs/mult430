@@ -1,0 +1,34 @@
+[package]
+authors = ["sam"]
+edition = "2018"
+readme = "README.md"
+name = "mult430"
+version = "0.1.0"
+
+[dependencies]
+msp430 = ""
+msp430-rt = ""
+msp430-atomic = ""
+panic-msp430 = ""
+
+[dependencies.msp430g2231]
+path = "../msp430g2231"
+version = ""
+features = ["rt"]
+
+# OnceCell provides a better size footprint compared to RefCell.
+[dependencies.once_cell]
+version = ""
+default_features = false
+
+# Required for `xargo fix` to work!
+[[bin]]
+name = "mult430"
+test = false
+bench = false
+
+[profile.release]
+opt-level = "s" # Size is more important than performance on MSP430.
+codegen-units = 1 # Better size optimization.
+lto = "fat" # _Much_ better size optimization.
+# debug = true # Debug _can_ slightly increase size of .text segment.
