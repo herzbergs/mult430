@@ -16,6 +16,12 @@ use msp430_atomic::{AtomicU16, AtomicBool};
 mod pulses;
 use pulses::{SyncSignal, SyncKind};
 
+// Amount to divide will have a default of 1
+static DIVISOR : AtomicU16 = AtomicU16::new(1);
+// A flag to indicate the next clock pulse should count as "beat 1"
+static IS_HARD_SYNC : AtomicBool = AtomicBool::new(false);
+
+
 // The compiler will emit calls to the abort() compiler intrinsic if debug assertions are
 // enabled (default for dev profile). MSP430 does not actually have meaningful abort() support
 // so for now, we create our own in each application where debug assertions are present.
@@ -94,6 +100,9 @@ fn main() -> ! {
 
     unsafe { mspint::enable(); }
 
+    // before writing UI will use a fixed divide and multiply
+    DIVISOR.store(2);
+
     loop {
         update_ui();
     }
@@ -120,7 +129,21 @@ fn main() -> ! {
 // and capture times for clock multiplication
 #[interrupt]
 fn TIMERA1() {
+    static mut TICK_COUNT : u16 = 0;
 
+    *TICK_COUNT = match IS_HARD_SYNC.load() {
+        true => 0,
+        false => *TICK_COUNT,
+    };
+
+    if *TICK_COUNT == 0 {
+        // do so and so
+    }
+
+    *TICK_COUNT += 1;
+    if *TICK_COUNT >= DIVISOR.load() {
+        *TICK_COUNT = 0;
+    }
 }
 
 // toggle that darn bit, and then update or cause to be updated the timer value

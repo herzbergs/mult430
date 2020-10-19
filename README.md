@@ -4,14 +4,21 @@ Mult430 is a tool to multiply and divide the rate of pulses that are used to syn
 
 ### Project Goals
 
-This is a project first and foremost for me to play around and explore. Both the rust language, which is new to me, on limited hardware, and with music. I anticipate first controlling the device with a uart based interface, and then later moving to a character display and physical buttons.
+This is a project first and foremost for me to play around and explore. Both the rust language, which is new to me, and with limited hardware. And I suppose with music. I anticipate first controlling the with a fixed divisor chosen at compile time, and then later moving to a character display and physical buttons.
 
 ### Parts
 
 MSP430g2231
+
 2 minijacks
+
 16x2 Character Display
+
 3 buttons
+
+### Resources
+
+This project uses two timers, one of which with a capture input pin, the USI (for the display), and 3 or 4 GPIO pins. Pretty much at the limit of pins on the MSP430g2231. This chip doesn't have a Uart. If I decide I want one for convenience's sake, porting to a more full featured chip should be easy. This is just what I had lying around.
 
 ### Instructions
 
