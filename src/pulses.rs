@@ -10,7 +10,7 @@ pub enum SyncKind {
 pub struct SyncSignal {
     pub low_time : u16,
     pub high_time : u16,
-    pub is_high : bool,
+    pub multiplicand : u16,
     kind : SyncKind,
 }
 
@@ -21,7 +21,7 @@ impl SyncSignal {
             low_time: 0,
             /// Units are arbitrary clock ticks
             high_time: 0,
-            is_high: true,
+            multiplicand: 1,
             kind,
         }
     }
@@ -33,9 +33,5 @@ impl SyncSignal {
         };
 
         self.low_time = length - self.high_time;
-    }
-
-    pub fn toggle(&mut self) {
-        self.is_high = !self.is_high;
     }
 }
