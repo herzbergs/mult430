@@ -61,13 +61,14 @@ fn main() -> ! {
     DIVISOR.store(2);
 
     let timer = &hw.TIMER_A2;
-    let mut counter = TimerState::new(
-        |val| {
-            timer.taccr0.write(|w| unsafe { w.bits(val) });
-            timer.tacctl0.modify(|_, w| w.ccie().set_bit());
-        },
-        || {timer.tacctl0.modify(|_, w| w.ccie().set_bit());}
-    );
+
+    let set_timer_fn = |val| {
+        timer.taccr0.write(|w| unsafe { w.bits(val) });
+        timer.tacctl0.modify(|_, w| w.ccie().set_bit());
+    };
+    let stop_timer_fn = || {timer.tacctl0.modify(|_, w| w.ccie().set_bit());};
+
+    let mut counter = TimerState::new(set_timer_fn, stop_timer_fn);
 
     let mut sync = SyncSignal::new(SyncKind::PulseTrain(200));
     sync.set_length(500);
