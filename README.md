@@ -24,3 +24,4 @@ This project uses two timers, one of which with a capture input pin, the USI (fo
 
 To build, execute 'cargo build -Zbuild-std=core --release'. Steps to flash the chip will vary, but for me it is '/usr/local/bin/mspdebug rf2500 'prog target/msp430-none-elf/release/mult430'.
 
+This project uses the peripheral access crate for msp430g2231. This is an auto generated crate currently unavailible on crates.io. I have not yet uploaded a version of it because I think it could use quite a bit of hand tweaking. The main issue with the default svd is fields are provided as individual bits.
