@@ -16,6 +16,7 @@ use pulses::{SyncSignal, SyncKind};
 mod timer_state;
 use timer_state::TimerState;
 mod hw_utils;
+mod i2c;
 
 
 // Amount to divide will have a default of 1
@@ -56,6 +57,8 @@ fn main() -> ! {
     hw_utils::setup_sysclk(&hw.SYSTEM_CLOCK);
     hw_utils::setup_port(&hw.PORT_1_2);
     hw_utils::setup_timer(&hw.TIMER_A2);
+
+    i2c::i2c_init(&hw.USI);
 
     // before writing UI will use a fixed divide and multiply
     DIVISOR.store(2);
